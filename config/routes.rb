@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
-  resources :chat_rooms
+  root 'chat_rooms#index'
+  resources :chat_rooms do
+    member do
+      post '/join' => 'chat_rooms#join'
+      #post 'chat_rooms/:id/join'=>'chat_rooms#join' ㅇㅣ거한번확인할것
+    end
+  end
   devise_for :users
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

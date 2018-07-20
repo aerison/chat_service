@@ -25,9 +25,10 @@ class ChatRoomsController < ApplicationController
   # POST /chat_rooms.json
   def create
     @chat_room = ChatRoom.new(chat_room_params)
-
+    @chat_room.master_id = current_user.email
     respond_to do |format|
       if @chat_room.save
+        Admission.create(user_id: current_user.id , chat_room_id: @chat_room.id)
         format.html { redirect_to @chat_room, notice: 'Chat room was successfully created.' }
         format.json { render :show, status: :created, location: @chat_room }
       else
@@ -58,6 +59,11 @@ class ChatRoomsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to chat_rooms_url, notice: 'Chat room was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+  def join #user가 참여하는 액션
+    unless current_user.join_room?(@chat_room)
+    Admission.create(user_id: current_user.id, chat_room_id: params[:id])
     end
   end
 

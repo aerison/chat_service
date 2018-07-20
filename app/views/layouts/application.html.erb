@@ -2,11 +2,20 @@
 <html>
 <head>
   <title>Chatservice</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
+  <script src="https://js.pusher.com/4.1/pusher.min.js"></script>
+
 </head>
 <body>
+<% if user_signed_in?%>
+  <p><%=current_user.email%></p>
+  <%= link_to 'log_out', destroy_user_session_path, method: :delete%>
+<%else%>
+  <%= link_to 'log_in',new_user_session_path%>
+  <%= link_to '회원가입',new_user_registration_path%>
+<% end %>
 
 <%= yield %>
 
