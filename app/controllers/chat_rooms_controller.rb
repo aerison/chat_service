@@ -1,5 +1,5 @@
 class ChatRoomsController < ApplicationController
-  before_action :set_chat_room, only: [:show, :edit, :update, :destroy]
+  before_action :set_chat_room, only: [:show, :edit, :update, :destroy, :join, :chat, :exit]
 
   # GET /chat_rooms
   # GET /chat_rooms.json
@@ -64,6 +64,21 @@ class ChatRoomsController < ApplicationController
   def join #user가 참여하는 액션
     unless current_user.join_room?(@chat_room)
     Admission.create(user_id: current_user.id, chat_room_id: params[:id])
+  else
+    render js: "alert('already participated')"
+    end
+  end
+  def chat
+    #@chat_room ->chat
+    @chat_room.chats.create(user_id:current_user.id, message:params[:message])
+  end
+
+  def exit
+      if current_user.email == @chat_room.master_id
+        @chat_room.destroy
+      else
+      admission=Admission.find_by(user_id: current_user.id , chat_room_id: @chat_room.id)
+      admission.destroy #where는 컬렉션으로 모으기 때문에 0를 쓴것이다.
     end
   end
 

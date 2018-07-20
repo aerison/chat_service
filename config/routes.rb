@@ -3,7 +3,10 @@ Rails.application.routes.draw do
   resources :chat_rooms do
     member do
       post '/join' => 'chat_rooms#join'
-      #post 'chat_rooms/:id/join'=>'chat_rooms#join' ㅇㅣ거한번확인할것
+      #post 'chat_rooms/:id/join'=>'chat_rooms#join' 과 동일함
+      post '/chat' => 'chat_rooms#chat'
+        #post 'chat_rooms/:id/chat'=>'chat_rooms#chat' 과 동일함
+      delete '/exit' => 'chat_rooms#exit'  
     end
   end
   devise_for :users
